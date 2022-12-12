@@ -25,7 +25,7 @@ set -o pipefail
 
 ## DESCRIPTION:
 ##
-## This script queries all repos in a given github org and adds the issues 
+## This script queries all repos in a given github org and adds the issues
 ## with label 'sig/auth' to a specified project board.
 ##
 ## REREQS:
@@ -80,7 +80,7 @@ repos_json="$(gh api graphql --paginate -f query='
 
 repos="$(jq ".data.viewer.organization.repositories.nodes[].name" <<< "$repos_json" |  tr -d '"' )"
 
-for repo in $repos
+for repo in kubernetes
 do
     echo "Looking for issues in ${GH_ORG}/${repo}"
 
@@ -111,14 +111,14 @@ do
             issue_number=$(jq ".data.repository.issues.nodes[$i].number" <<< "$issues_json")
             echo "    adding ${issue_number} - ${issue_title}"
 
-            gh api graphql -f query='
-                mutation($project:ID!, $issue:ID!) {
-                    addProjectV2ItemById(input: {projectId: $project, contentId: $issue}) {
-                        item {
-                            id
-                        }
-                    }
-                }' -f project="${project_id}" -f issue="${issue_id}" --jq .data.addProjectV2ItemById.item.id > /dev/null
+            # gh api graphql -f query='
+            #     mutation($project:ID!, $issue:ID!) {
+            #         addProjectV2ItemById(input: {projectId: $project, contentId: $issue}) {
+            #             item {
+            #                 id
+            #             }
+            #         }
+            #     }' -f project="${project_id}" -f issue="${issue_id}" --jq .data.addProjectV2ItemById.item.id > /dev/null
         done
     fi
 done

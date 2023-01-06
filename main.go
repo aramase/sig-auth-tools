@@ -32,7 +32,7 @@ const (
 	// orgName is the name of the GitHub organization to query.
 	orgName = "kubernetes"
 	// projectName is the name of the GitHub project to query.
-	projectName = "SIG Auth"
+	projectName = "@aramase's untitled project" // "SIG Auth"
 )
 
 type ghClient struct {
